@@ -3,7 +3,6 @@ import './App.css';
 import AnnouncementBar from './components/AnnouncementBar';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
-import StatsBar from './components/StatsBar';
 import FeatureStorytellingSection from './components/FeatureStorytellingSection';
 import DeviceCatalogSection from './components/DeviceCatalogSection';
 import HowItWorksSection from './components/HowItWorksSection';
@@ -62,9 +61,6 @@ function App() {
       <main className="grow">
         {/* 3. Hero Section */}
         <HeroSection onOpenDemoModal={() => setDemoModalOpen(true)} />
-
-        {/* 4. Trust / Social Proof Stats Bar */}
-        <StatsBar />
 
         {/* 5. 2x2 Feature Grid System Architecture */}
         <FeatureStorytellingSection />
