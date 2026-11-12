@@ -1,85 +1,96 @@
 import React from 'react';
-import { Fingerprint, MessageCircle, Mail, Globe } from 'lucide-react';
+import { MessageCircle, Mail, Globe } from 'lucide-react';
+import Logo from './site/Logo';
+
+const columns = [
+  {
+    title: 'Product',
+    span: 'lg:col-span-2',
+    links: [
+      ['Features Overview', '#features'],
+      ['Plans & Pricing', '#pricing'],
+      ['ZKTeco Hardware', '#devices'],
+      ['3-Step Setup', '#how-it-works'],
+    ],
+  },
+  {
+    title: 'Company & Resources',
+    span: 'lg:col-span-3',
+    links: [
+      ['FAQ & Support', '#faq'],
+      ['Contact Support', 'mailto:support@bluewhyteapps.com'],
+      ['HR Tech Guide', '#'],
+    ],
+  },
+  {
+    title: 'Legal',
+    span: 'lg:col-span-2',
+    links: [
+      ['Privacy Policy', '#'],
+      ['Terms of Service', '#'],
+      ['Refund Policy', '#'],
+      ['Data Security', '#'],
+    ],
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0B192C] text-slate-400 pt-16 pb-12 border-t border-slate-800 text-left">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          
-          {/* Logo Column */}
-          <div className="space-y-4">
-            <a href="#" className="inline-block overflow-visible py-1">
-              <img
-                src="/bluetyk_logo.png"
-                alt="Bluetyk Logo"
-                className="h-10 sm:h-12 w-auto object-contain scale-[1.8] origin-left mix-blend-screen brightness-125"
-              />
+    <footer className="relative bg-white text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-5 space-y-5">
+            <a href="#home" className="inline-block" aria-label="Bluetyk home">
+              <Logo className="h-8" />
             </a>
-            <p className="text-xs text-slate-400 leading-relaxed font-normal">
+            <p className="text-sm text-ink-3 leading-relaxed max-w-sm">
               Biometric attendance & automated payroll management platform for modern businesses in India.
             </p>
-            <div className="pt-2 text-xs text-slate-400 space-y-2 font-medium">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#0284C7]" />
-                <a href="mailto:support@bluewhyteapps.com" className="hover:text-white transition-colors">
-                  support@bluewhyteapps.com
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-slate-400" />
-                <span>BlueWhyte Software Solutions</span>
+            <div className="space-y-2.5 text-sm">
+              <a href="mailto:support@bluewhyteapps.com" className="flex items-center gap-2.5 text-ink-2 hover:text-brand-600 transition-colors w-fit">
+                <span className="w-8 h-8 rounded-full bg-canvas flex items-center justify-center">
+                  <Mail className="w-3.5 h-3.5" />
+                </span>
+                support@bluewhyteapps.com
+              </a>
+              <div className="flex items-center gap-2.5 text-ink-2">
+                <span className="w-8 h-8 rounded-full bg-canvas flex items-center justify-center">
+                  <Globe className="w-3.5 h-3.5" />
+                </span>
+                BlueWhyte Software Solutions
               </div>
             </div>
           </div>
 
-          {/* Product Column */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">Product</h4>
-            <ul className="space-y-2.5 text-xs font-medium">
-              <li><a href="#features" className="hover:text-[#0284C7] transition-colors">Features Overview</a></li>
-              <li><a href="#pricing" className="hover:text-[#0284C7] transition-colors">Plans & Pricing</a></li>
-              <li><a href="#devices" className="hover:text-[#0284C7] transition-colors">ZKTeco Hardware</a></li>
-              <li><a href="#how-it-works" className="hover:text-[#0284C7] transition-colors">3-Step Setup</a></li>
-            </ul>
-          </div>
-
-          {/* Company & Resources Column */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">Company & Resources</h4>
-            <ul className="space-y-2.5 text-xs font-medium">
-              <li><a href="#faq" className="hover:text-[#0284C7] transition-colors">FAQ & Support</a></li>
-              <li><a href="mailto:support@bluewhyteapps.com" className="hover:text-[#0284C7] transition-colors">Contact Support</a></li>
-              <li><a href="#" className="hover:text-[#0284C7] transition-colors">HR Tech Guide</a></li>
-            </ul>
-          </div>
-
-          {/* Legal Column */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">Legal</h4>
-            <ul className="space-y-2.5 text-xs font-medium">
-              <li><a href="#" className="hover:text-[#0284C7] transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-[#0284C7] transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-[#0284C7] transition-colors">Refund Policy</a></li>
-              <li><a href="#" className="hover:text-[#0284C7] transition-colors">Data Security</a></li>
-            </ul>
-          </div>
-
+          {columns.map((col) => (
+            <div key={col.title} className={col.span}>
+              <h4 className="text-[13px] font-semibold text-ink mb-4 tracking-tight">{col.title}</h4>
+              <ul className="space-y-3 text-sm">
+                {col.links.map(([label, href]) => (
+                  <li key={label}>
+                    <a href={href} className="text-ink-3 hover:text-ink transition-colors">
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="pt-8 border-t border-slate-800/80 text-center text-xs text-slate-500 font-medium">
+        <div className="mt-14 pt-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-3">
           <p>© 2026 BlueWhyte Software Solutions. All rights reserved.</p>
+          <Logo className="h-4 opacity-40 grayscale" />
         </div>
-
       </div>
 
-      {/* Floating WhatsApp Support Button with rounded-full border-radius */}
+      {/* Floating WhatsApp support button */}
       <a
         href="https://wa.me/919000000000?text=Hi%20Bluetyk%20Team%2C%20I%20have%20a%20question%20about%20biometric%20attendance"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-[#0284C7] hover:bg-[#0369A1] text-white p-3.5 rounded-full hover:scale-105 transition-all flex items-center justify-center border border-white/20"
+        className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#22C55E] text-white flex items-center justify-center shadow-[0_14px_30px_-10px_rgba(34,197,94,0.7)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:scale-110"
         aria-label="Chat on WhatsApp"
       >
         <MessageCircle className="w-6 h-6 fill-current" />

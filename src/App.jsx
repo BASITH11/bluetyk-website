@@ -13,11 +13,9 @@ import SecurityTrustSection from './components/SecurityTrustSection';
 import FAQSection from './components/FAQSection';
 import TrialSignupSection from './components/TrialSignupSection';
 import Footer from './components/Footer';
-import DemoModal from './components/DemoModal';
 import DeviceCatalogPage from './pages/DeviceCatalogPage';
 
 function App() {
-  const [demoModalOpen, setDemoModalOpen] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('home');
 
   useEffect(() => {
@@ -49,20 +47,20 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-blue-600 selection:text-white flex flex-col justify-between">
-      
+    <div className="min-h-screen bg-white text-ink font-sans flex flex-col justify-between">
+
       {/* 1. Announcement Bar */}
       <AnnouncementBar />
 
-      {/* 2. Sticky Navbar */}
+      {/* 2. Floating Navbar */}
       <Navbar />
 
       {/* Main Content Area */}
       <main className="grow">
         {/* 3. Hero Section */}
-        <HeroSection onOpenDemoModal={() => setDemoModalOpen(true)} />
+        <HeroSection />
 
-        {/* 5. 2x2 Feature Grid System Architecture */}
+        {/* 5. Feature Cards */}
         <FeatureStorytellingSection />
 
         {/* 6. Hardware Device Integration Catalog (Triggers full screen DeviceCatalogPage) */}
@@ -71,7 +69,7 @@ function App() {
         {/* 7. 3-Step How It Works Workflow */}
         <HowItWorksSection />
 
-        {/* 8. Dark Navy Automation Architecture Pipeline */}
+        {/* 8. Automation Architecture Pipeline */}
         <WorkflowArchitectureSection />
 
         {/* 9. Minimal Enterprise Pricing */}
@@ -86,15 +84,13 @@ function App() {
         {/* 12. Frequently Asked Questions Accordion */}
         <FAQSection />
 
-        {/* 13. Final Dark Navy Trial Signup CTA */}
+        {/* 13. Trial Signup CTA */}
         <TrialSignupSection />
       </main>
 
-      {/* 14. Dark Navy Footer & WhatsApp Support Button */}
+      {/* 14. Footer & WhatsApp Support Button */}
       <Footer />
 
-      {/* Interactive Video Demo Modal */}
-      <DemoModal isOpen={demoModalOpen} onClose={() => setDemoModalOpen(false)} />
 
     </div>
   );

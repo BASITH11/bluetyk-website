@@ -1,144 +1,106 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, Clock, DollarSign, BarChart2, Cpu, Check, ArrowUpRight } from 'lucide-react';
-import DashboardMockup from './ui/DashboardMockup';
+import { Check, ArrowRight } from 'lucide-react';
+import DashboardShot from './ui/DashboardShot';
 import AttendanceMockup from './ui/AttendanceMockup';
+import AttendanceShot from './ui/AttendanceShot';
 import PayrollMockup from './ui/PayrollMockup';
 import ReportsMockup from './ui/ReportsMockup';
+import Reveal from './site/Reveal';
+import ScaledFrame from './site/ScaledFrame';
+import ZoomShot from './site/ZoomShot';
+
+const tabs = [
+  { id: 'dashboard', label: 'Dashboard', Comp: DashboardShot, width: 1180, shot: { sidebar: 0.143 } },
+  { id: 'attendance', label: 'Attendance', Comp: AttendanceShot, width: 1180, shot: { sidebar: 0.133 } },
+  { id: 'payroll', label: 'Payroll', Comp: PayrollMockup, width: 680 },
+  { id: 'reports', label: 'Reports', Comp: ReportsMockup, width: 640 },
+  { id: 'devices', label: 'Devices', Comp: AttendanceMockup, width: 680 },
+];
+
+const checks = [
+  'Real-time ZKTeco Push SDK attendance sync',
+  'Automated PF, ESI, TDS statutory payroll engine',
+  'Multi-shift rotation & overtime calculations',
+  'One-click Excel muster rolls & bulk PDF payslips',
+];
 
 export default function DemoShowcaseSection() {
   const [activeTab, setActiveTab] = useState('dashboard');
-
-  const tabs = [
-    { id: 'dashboard', label: 'Dashboard', file: 'dashboard.overview', icon: LayoutDashboard },
-    { id: 'attendance', label: 'Attendance', file: 'attendance.live', icon: Clock },
-    { id: 'payroll', label: 'Payroll', file: 'payroll.calc', icon: DollarSign },
-    { id: 'reports', label: 'Reports', file: 'reports.export', icon: BarChart2 },
-    { id: 'devices', label: 'Devices', file: 'devices.zkteco', icon: Cpu }
-  ];
-
-  const currentTabObj = tabs.find((t) => t.id === activeTab) || tabs[0];
+  const current = tabs.find((t) => t.id === activeTab) || tabs[0];
+  const Current = current.Comp;
 
   return (
-    <section id="demo" className="py-20 sm:py-24 bg-white relative overflow-hidden">
-      
-      {/* Laravel.com Architectural Border Frame: Top & Bottom Horizontal Lines + Left & Right Vertical Lines */}
-      <div className="absolute top-0 inset-x-0 h-px bg-slate-200 pointer-events-none z-10" />
-      <div className="absolute bottom-0 inset-x-0 h-px bg-slate-200 pointer-events-none z-10" />
-      
-      <div className="absolute top-0 bottom-0 left-3 sm:left-6 lg:left-8 w-px bg-slate-200 pointer-events-none z-10" />
-      <div className="absolute top-0 bottom-0 right-3 sm:right-6 lg:right-8 w-px bg-slate-200 pointer-events-none z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-20">
-        
-        {/* Direct 2-Column Grid Layout */}
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          
-          {/* Left Column: Headline, Text, Checkmarks & CTA */}
-          <div className="lg:col-span-5 space-y-6 text-left pt-2">
-            
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.12] tracking-tight">
-              See Bluetyk in action
-            </h2>
-
-            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
+    <section id="demo" className="relative bg-white py-20 sm:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Copy */}
+          <Reveal className="lg:col-span-5 space-y-6">
+            <h2 className="text-[2rem] leading-[1.08] sm:text-5xl font-semibold text-ink">See Bluetyk in action</h2>
+            <p className="text-base sm:text-lg text-ink-3 leading-relaxed">
               Bluetyk brings biometric punch streaming, leave tracking, shift rules, and statutory payroll into one unified enterprise platform.
             </p>
-
-            {/* Red Accent Checkmarks */}
-            <div className="space-y-3 pt-1 text-sm font-semibold text-slate-700">
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#FF2D20] stroke-[3] shrink-0" />
-                <span>Real-time ZKTeco Push SDK attendance sync</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#FF2D20] stroke-[3] shrink-0" />
-                <span>Automated PF, ESI, TDS statutory payroll engine</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#FF2D20] stroke-[3] shrink-0" />
-                <span>Multi-shift rotation & overtime calculations</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Check className="w-4 h-4 text-[#FF2D20] stroke-[3] shrink-0" />
-                <span>One-click Excel muster rolls & bulk PDF payslips</span>
-              </div>
-            </div>
-
-            {/* Action Button CTA matching screenshot */}
-            <div className="pt-4">
-              <a
-                href="#trial-signup"
-                className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs px-5 py-3 rounded-xl shadow-xs transition-colors group"
-              >
-                <span>Explore the platform</span>
-                <ArrowUpRight className="w-4 h-4 text-[#FF2D20] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <ul className="space-y-3 pt-1">
+              {checks.map((c) => (
+                <li key={c} className="flex items-center gap-3 text-[15px] font-medium text-ink-2">
+                  <span className="w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center shrink-0">
+                    <Check className="w-3 h-3 text-white stroke-[3.5]" />
+                  </span>
+                  {c}
+                </li>
+              ))}
+            </ul>
+            <div className="pt-2">
+              <a href="#trial-signup" className="btn btn-primary group">
+                Explore the platform
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
               </a>
             </div>
+          </Reveal>
 
-          </div>
+          {/* Product canvas */}
+          <Reveal delay={150} className="lg:col-span-7">
+            <div className="relative rounded-[28px] sm:rounded-[32px] p-3 sm:p-6 overflow-hidden bg-[linear-gradient(160deg,#CFE5FF_0%,#E9F3FF_45%,#F6FAFF_100%)] ring-1 ring-brand-100">
+              <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/70 blur-3xl pointer-events-none" />
 
-          {/* Right Column: Floating Pill Bar + Quarter-Screen Mockup Canvas */}
-          <div className="lg:col-span-7 flex flex-col items-end w-full">
-            
-            {/* Floating Pill Bar Navigation */}
-            <div className="bg-white/90 backdrop-blur-md p-1 rounded-full border border-slate-200/90 flex items-center gap-1 shadow-xs mb-6 overflow-x-auto max-w-full">
-              {tabs.map((tab) => {
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
-                      isActive
-                        ? 'bg-[#0284C7] text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Quarter-Screen Application Canvas Container */}
-            <div className="w-full relative h-[380px] sm:h-[440px] bg-white rounded-tl-3xl border-t border-l border-slate-200/90 overflow-hidden shadow-2xl">
-              
-              {/* Mockup Top Tab Bar */}
-              <div className="bg-slate-100/90 px-4 py-2 border-b border-slate-200 flex items-center justify-between text-xs font-semibold text-slate-700">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                  <div className="h-4 w-px bg-slate-300 mx-1" />
-                  <div className="bg-white px-3 py-1 rounded-t-md border-t-2 border-[#0284C7] border-x border-slate-200 text-slate-900 font-bold flex items-center gap-1.5 text-[11px]">
-                    <span className="text-[#0284C7]">app/</span>
-                    <span>{currentTabObj.file}</span>
-                  </div>
-                </div>
-                <div className="text-[10px] text-slate-400 font-mono hidden sm:block">
-                  LIVE PREVIEW // 25% SCALE
+              {/* Tabs */}
+              <div className="relative flex justify-center mb-5">
+                <div className="glass rounded-full p-1 flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full shadow-[0_8px_24px_-14px_rgba(16,24,40,0.3)]">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-3 sm:px-4 py-2 rounded-full text-[13px] font-medium whitespace-nowrap transition-all duration-300 ${
+                        activeTab === tab.id
+                          ? 'bg-ink text-white shadow-sm'
+                          : 'text-ink-2 hover:text-ink hover:bg-white/70'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Scaled Quarter-Screen Application Screen */}
-              <div className="p-3 w-[160%] sm:w-[140%] transform origin-top-left">
-                {activeTab === 'dashboard' && <DashboardMockup />}
-                {activeTab === 'attendance' && <AttendanceMockup />}
-                {activeTab === 'payroll' && <PayrollMockup />}
-                {activeTab === 'reports' && <ReportsMockup />}
-                {activeTab === 'devices' && <AttendanceMockup />}
+              {/* Screen */}
+              <div className="relative h-[280px] sm:h-[420px] overflow-hidden rounded-t-[22px] bg-white/60 ring-1 ring-white p-2 pb-0">
+                <div key={activeTab} className="fade-up" style={{ animationDuration: '0.7s' }}>
+                  {current.shot ? (
+                    <div className="rounded-t-[16px] overflow-hidden bg-white">
+                      <ZoomShot sidebar={current.shot.sidebar} mobile={1.9}>
+                        <Current />
+                      </ZoomShot>
+                    </div>
+                  ) : (
+                    <ScaledFrame designWidth={current.width}>
+                      <Current />
+                    </ScaledFrame>
+                  )}
+                </div>
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F3F8FF] to-transparent pointer-events-none" />
               </div>
-
-              {/* Subtle Right & Bottom Crop Gradient Fade */}
-              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white via-white/50 to-transparent pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/50 to-transparent pointer-events-none" />
-
             </div>
-
-          </div>
-
+          </Reveal>
         </div>
-
       </div>
     </section>
   );

@@ -1,70 +1,62 @@
 import React from 'react';
-import { DollarSign, FileText } from 'lucide-react';
+import { IndianRupee, FileText } from 'lucide-react';
+
+const rows = [
+  { name: 'Rajesh Kumar', designation: 'Senior CNC Operator', base: '₹35,000', ot: '₹2,400', net: '₹33,600' },
+  { name: 'Priya Sharma', designation: 'Quality Inspector', base: '₹28,000', ot: '₹0', net: '₹24,800' },
+  { name: 'Arun Nair', designation: 'Maintenance Tech', base: '₹32,000', ot: '₹1,800', net: '₹30,200' },
+];
 
 export default function PayrollMockup() {
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl overflow-hidden text-left font-sans text-xs">
-      <div className="bg-[#0B192C] text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
-        <div className="flex items-center space-x-2">
-          <DollarSign className="w-4 h-4 text-[#0284C7]" />
-          <span className="font-bold text-white text-xs">Automated Statutory Payroll Calculation</span>
+    <div className="w-full bg-white border border-line rounded-[20px] overflow-hidden text-left font-sans text-xs text-ink">
+      <div className="px-5 py-3.5 flex items-center justify-between border-b border-line">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+            <IndianRupee className="w-4 h-4" />
+          </div>
+          <span className="font-display font-semibold text-[14px] tracking-tight">Automated Statutory Payroll Calculation</span>
         </div>
-        <span className="bg-[#0284C7]/20 text-[#0284C7] text-[10px] font-bold px-2 py-0.5 rounded border border-[#0284C7]/30">
-          August 2026 Batch
-        </span>
+        <span className="bg-brand-50 text-brand-600 text-[10px] font-semibold px-2.5 py-1 rounded-full">August 2026 Batch</span>
       </div>
 
-      <div className="p-5 bg-slate-50 space-y-4">
-        <div className="grid grid-cols-4 gap-2">
-          <div className="bg-white p-3 rounded-xl border border-slate-200">
-            <div className="text-slate-400 text-[9px]">Gross Salary</div>
-            <div className="text-base font-black text-slate-900 mt-0.5">₹5,12,000</div>
-          </div>
-          <div className="bg-white p-3 rounded-xl border border-slate-200">
-            <div className="text-slate-400 text-[9px]">PF Deductions</div>
-            <div className="text-base font-black text-slate-900 mt-0.5">₹48,200</div>
-          </div>
-          <div className="bg-white p-3 rounded-xl border border-slate-200">
-            <div className="text-slate-400 text-[9px]">ESI & TDS</div>
-            <div className="text-base font-black text-slate-900 mt-0.5">₹35,300</div>
-          </div>
-          <div className="bg-white p-3 rounded-xl border border-slate-200">
-            <div className="text-slate-400 text-[9px]">Net Payable</div>
-            <div className="text-base font-black text-emerald-600 mt-0.5">₹4,28,500</div>
-          </div>
+      <div className="p-5 bg-canvas/60 space-y-3">
+        <div className="grid grid-cols-4 gap-2.5">
+          {[
+            ['Gross Salary', '₹5,12,000', 'text-ink'],
+            ['PF Deductions', '₹48,200', 'text-ink'],
+            ['ESI & TDS', '₹35,300', 'text-ink'],
+            ['Net Payable', '₹4,28,500', 'text-emerald-600'],
+          ].map(([label, value, cls]) => (
+            <div key={label} className="bg-white p-3 rounded-2xl border border-line">
+              <div className="text-ink-3 text-[10px] font-medium">{label}</div>
+              <div className={`font-display text-[17px] font-semibold tracking-tight mt-1 ${cls}`}>{value}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
+        <div className="bg-white rounded-2xl border border-line p-4 space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-900">Payslip Queue (154 Employees)</span>
-            <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded">
-              ✓ All Calculations Verified
-            </span>
+            <span className="text-[13px] font-semibold">Payslip Queue (154 Employees)</span>
+            <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full">✓ All Calculations Verified</span>
           </div>
-
-          <div className="space-y-2">
-            {[
-              { name: 'Rajesh Kumar', designation: 'Senior CNC Operator', base: '₹35,000', ot: '₹2,400', net: '₹33,600' },
-              { name: 'Priya Sharma', designation: 'Quality Inspector', base: '₹28,000', ot: '₹0', net: '₹24,800' },
-              { name: 'Arun Nair', designation: 'Maintenance Tech', base: '₹32,000', ot: '₹1,800', net: '₹30,200' }
-            ].map((p, i) => (
-              <div key={i} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <div>
-                  <div className="font-bold text-slate-900">{p.name}</div>
-                  <div className="text-[10px] text-slate-400">{p.designation} · Base: {p.base}</div>
-                </div>
-                <div className="text-right flex items-center space-x-3">
-                  <div>
-                    <div className="font-black text-slate-900">{p.net}</div>
-                    <div className="text-[9px] text-emerald-600 font-semibold">OT: {p.ot}</div>
-                  </div>
-                  <button className="bg-white border border-slate-200 p-1.5 rounded text-slate-600 hover:text-[#0284C7]">
-                    <FileText className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+          {rows.map((p) => (
+            <div key={p.name} className="flex items-center justify-between p-2.5 rounded-xl bg-canvas">
+              <div>
+                <div className="font-semibold">{p.name}</div>
+                <div className="text-[10px] text-ink-3">{p.designation} · Base: {p.base}</div>
               </div>
-            ))}
-          </div>
+              <div className="flex items-center gap-3 text-right">
+                <div>
+                  <div className="font-semibold">{p.net}</div>
+                  <div className="text-[9px] text-emerald-600 font-semibold">OT: {p.ot}</div>
+                </div>
+                <span className="w-7 h-7 rounded-full bg-white border border-line flex items-center justify-center text-ink-2">
+                  <FileText className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
