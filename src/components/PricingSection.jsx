@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Check, Loader2, Cpu, Users, Sparkles, Building2, Rocket } from 'lucide-react';
+import { Check, Loader2, Cpu, Users, Sparkles, Building2, Rocket, TrendingUp } from 'lucide-react';
 import { fetchPlans, FALLBACK_PLANS } from '../services/api';
 import SectionHeader from './site/SectionHeader';
 import Reveal from './site/Reveal';
 
-const planIcon = { starter: Rocket, professional: Sparkles, enterprise: Building2 };
+const colsClass = { 2: 'xl:grid-cols-2', 3: 'xl:grid-cols-3', 4: 'xl:grid-cols-4' };
+const planIcon = { starter: Rocket, growth: TrendingUp, professional: Sparkles, enterprise: Building2 };
 
 export default function PricingSection() {
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'yearly'
@@ -24,6 +25,8 @@ export default function PricingSection() {
   const formatPrice = (amount) => new Intl.NumberFormat('en-IN').format(amount);
   const paidPlans = plans.filter((p) => !p.is_trial && p.slug !== 'trial');
   const yearly = billingCycle === 'yearly';
+  // Four plans need a wider 4-up grid; three keep the original 3-up layout.
+  const fourUp = paidPlans.length >= 4;
 
   return (
     <section
@@ -74,9 +77,12 @@ export default function PricingSection() {
             <Loader2 className="w-7 h-7 text-brand-500 animate-spin" />
           </div>
         ) : (
-          <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch max-w-xl lg:max-w-6xl mx-auto">
+          <div
+            className={`mt-12 sm:mt-16 mx-auto grid grid-cols-1 gap-5 md:grid-cols-2 xl:gap-0 xl:rounded-[32px] xl:border xl:border-line xl:bg-white/80 xl:backdrop-blur xl:shadow-[0_40px_80px_-48px_rgba(16,24,40,0.28)] ${
+              colsClass[paidPlans.length] || 'xl:grid-cols-4'
+            } ${fourUp ? 'max-w-xl md:max-w-4xl xl:max-w-none' : 'max-w-xl md:max-w-4xl xl:max-w-6xl'}`}
+          >
             {paidPlans.map((plan, i) => {
-              const isPopular = plan.slug === 'professional';
               const Icon = planIcon[plan.slug] || Sparkles;
 
               let priceDisplay;
@@ -94,60 +100,79 @@ export default function PricingSection() {
               const membersText = plan.max_members >= 99999 ? 'Unlimited' : formatPrice(plan.max_members);
 
               return (
-                <Reveal key={plan.slug || plan.name} delay={i * 110} className="h-full">
+                <Reveal key={plan.slug || plan.name} delay={i * 90} className="h-full">
                   <div
-                    className={`relative h-full flex flex-col rounded-[28px] p-2 transition-all duration-500 ${
-                      isPopular
-                        ? 'bg-[linear-gradient(180deg,#D6E9FF_0%,#EAF4FF_100%)] ring-1 ring-brand-200 shadow-[0_30px_60px_-30px_rgba(0,112,235,0.45)] lg:-translate-y-3'
-                        : 'card card-hover'
+                    className={`relative h-full flex flex-col p-7 sm:p-8 rounded-[28px] border border-line bg-white xl:rounded-none xl:bg-transparent xl:border-y-0 xl:border-r-0 ${
+                      i === 0 ? 'xl:border-l-0' : ''
                     }`}
                   >
-                    <div className={`flex-1 flex flex-col rounded-[22px] p-6 sm:p-7 ${isPopular ? 'bg-white/70 backdrop-blur' : ''}`}>
-                      <div className="flex items-center justify-between">
-                        <span className={`w-10 h-10 rounded-2xl flex items-center justify-center ${isPopular ? 'bg-brand-500 text-white' : 'bg-brand-50 text-brand-600'}`}>
-                          <Icon className="w-5 h-5" />
+                    {/* Name */}
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center bg-brand-50 text-brand-600`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </span>
+                      <h3 className={`text-lg font-semibold text-ink`}>{plan.name}</h3>
+                    </div>
+                    <p className={`mt-4 text-sm leading-relaxed text-ink-3 min-h-[46px] xl:min-h-[68px]`}>{plan.description}</p>
+
+                    {/* Price */}
+                    <div className="mt-6">
+                      <div key={`${billingCycle}-${plan.slug}`} className="fade-up flex items-start gap-1">
+                        <span className={`mt-1.5 text-xl font-semibold text-ink-3`}>₹</span>
+                        <span className={`font-display text-[2.75rem] leading-none font-semibold tracking-tight text-ink`}>
+                          {priceDisplay}
                         </span>
                       </div>
+                      <div className={`mt-2 text-xs font-medium text-ink-3`}>{subText}</div>
+                    </div>
 
-                      <h3 className="mt-5 text-xl font-semibold text-ink">{plan.name}</h3>
-                      <p className="mt-1.5 text-sm text-ink-3 leading-relaxed min-h-[40px]">{plan.description}</p>
+                    {/* CTA sits under the price so every button lines up */}
+                    <a
+                      href="#trial-signup"
+                      className={`btn mt-6 w-full ${
+                        plan.slug === 'enterprise'
+                          ? 'btn-dark border border-transparent'
+                          : 'btn-ghost'
+                      }`}
+                    >
+                      {plan.slug === 'enterprise' ? 'Contact Sales' : 'Get Started'}
+                    </a>
 
-                      <div className="mt-6 flex items-baseline gap-1.5 flex-wrap">
-                        <span key={`${billingCycle}-${plan.slug}`} className="fade-up font-display text-[2.6rem] leading-none font-semibold tracking-tight text-ink">
-                          ₹{priceDisplay}
-                        </span>
-                        <span className="text-xs text-ink-3 font-medium">{subText}</span>
-                      </div>
+                    {/* Limits */}
+                    <dl
+                      className={`mt-7 rounded-2xl text-sm divide-y bg-canvas divide-line`}
+                    >
+                      {[
+                        { icon: Cpu, label: 'Devices', value: devicesText },
+                        { icon: Users, label: 'Members', value: membersText },
+                      ].map(({ icon: LIcon, label, value }) => (
+                        <div key={label} className="flex items-center justify-between px-4 py-3">
+                          <dt className={`flex items-center gap-2 text-ink-3`}>
+                            <LIcon className={`w-4 h-4 text-brand-600`} />
+                            {label}
+                          </dt>
+                          <dd className={`font-semibold text-ink`}>{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
 
-                      <div className="mt-6 grid grid-cols-2 gap-2 text-xs font-semibold text-ink-2">
-                        <span className="flex items-center gap-1.5 rounded-xl bg-canvas px-3 py-2.5">
-                          <Cpu className="w-3.5 h-3.5 text-brand-600" />
-                          {devicesText} Devices
-                        </span>
-                        <span className="flex items-center gap-1.5 rounded-xl bg-canvas px-3 py-2.5">
-                          <Users className="w-3.5 h-3.5 text-brand-600" />
-                          {membersText} Members
-                        </span>
-                      </div>
-
-                      <div className="mt-6 pt-6 border-t border-line space-y-3 flex-1">
-                        <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-3">Features:</div>
+                    {/* Features */}
+                    <div className="mt-7">
+                      <div className={`text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-3`}>Features:</div>
+                      <ul className="mt-4 space-y-3">
                         {(plan.features || []).map((feat) => (
-                          <div key={feat} className="flex items-start gap-2.5 text-sm text-ink-2">
-                            <span className="mt-0.5 w-4 h-4 rounded-full bg-brand-500 flex items-center justify-center shrink-0">
-                              <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
+                          <li key={feat} className={`flex items-start gap-2.5 text-sm text-ink-2`}>
+                            <span
+                              className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 bg-brand-100 text-brand-700`}
+                            >
+                              <Check className="w-2.5 h-2.5 stroke-[3.5]" />
                             </span>
                             <span>{feat}</span>
-                          </div>
+                          </li>
                         ))}
-                      </div>
-
-                      <a
-                        href="#trial-signup"
-                        className={`btn mt-8 w-full ${isPopular ? 'btn-primary' : plan.slug === 'enterprise' ? 'btn-dark' : 'btn-ghost'}`}
-                      >
-                        {plan.slug === 'enterprise' ? 'Contact Sales' : 'Get Started'}
-                      </a>
+                      </ul>
                     </div>
                   </div>
                 </Reveal>
