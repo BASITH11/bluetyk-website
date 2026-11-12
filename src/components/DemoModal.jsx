@@ -1,76 +1,91 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Play, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { Button } from './ui/button';
-import dashboardImg from '../assets/dashboard.png';
+import DashboardMockup from './ui/DashboardMockup';
+import ScaledFrame from './site/ScaledFrame';
 
 export default function DemoModal({ isOpen, onClose }) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col my-auto text-left">
-        
-        {/* Modal Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-800 bg-slate-900">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-lg bg-[#0284C7]/20 text-[#0284C7] flex items-center justify-center font-bold">
-              <Play className="w-4 h-4 fill-current ml-0.5" />
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0A0F1C]/40 backdrop-blur-md animate-in fade-in duration-300"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="demo-modal-title"
+    >
+      <div
+        className="relative w-full max-w-4xl rounded-[32px] p-2 glass shadow-[0_50px_100px_-30px_rgba(10,15,28,0.5)] animate-in zoom-in-95 fade-in duration-500"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="bg-white rounded-[26px] overflow-hidden text-left">
+          {/* Header */}
+          <div className="flex items-center justify-between px-5 sm:px-6 py-4">
+            <div className="flex items-center gap-3">
+              <span className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center">
+                <Play className="w-4 h-4 fill-current ml-0.5" />
+              </span>
+              <div>
+                <h3 id="demo-modal-title" className="text-base sm:text-lg font-semibold text-ink">Bluetyk Interactive Product Showcase</h3>
+                <p className="text-xs text-ink-3">See how biometric attendance & payroll work in real time</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">Bluetyk Interactive Product Showcase</h3>
-              <p className="text-xs text-slate-400">See how biometric attendance & payroll work in real time</p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            aria-label="Close modal"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-
-        {/* Modal Body / Demo Player Preview */}
-        <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden group">
-          <img
-            src={dashboardImg}
-            alt="Bluetyk Demo Preview"
-            className="w-full h-full object-cover opacity-80"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#0284C7] hover:bg-[#0369A1] text-white flex items-center justify-center transition-transform hover:scale-105 cursor-pointer mb-4">
-              <Play className="w-8 h-8 fill-current ml-1" />
-            </div>
-            <h4 className="text-2xl font-extrabold text-white">Bluetyk 2-Minute Guided Tour</h4>
-            <p className="text-sm text-slate-300 max-w-lg mt-2 font-normal">
-              Learn how to connect ZKTeco devices via Push ADMS, setup shift rules, and generate monthly salary slips.
-            </p>
-          </div>
-        </div>
-
-        {/* Modal Footer CTA */}
-        <div className="p-6 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-slate-400 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span>Ready to test with your own ZKTeco device?</span>
-          </div>
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <Button
+            <button
               onClick={onClose}
-              variant="outline"
-              className="w-full sm:w-auto border-slate-700 text-slate-300 hover:bg-slate-800 rounded-xl bg-transparent"
+              className="w-9 h-9 rounded-full bg-canvas text-ink-2 hover:bg-ink hover:text-white flex items-center justify-center transition-colors"
+              aria-label="Close modal"
             >
-              Close
-            </Button>
-            <a href="#trial-signup" onClick={onClose} className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-[#0284C7] hover:bg-[#0369A1] text-white font-bold px-5 rounded-xl">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Player */}
+          <div className="relative mx-3 sm:mx-4 aspect-video rounded-[20px] overflow-hidden bg-[linear-gradient(160deg,#CFE5FF,#EEF6FF)]">
+            <div className="absolute inset-0 p-4 sm:p-6 opacity-70">
+              <ScaledFrame designWidth={1180}>
+                <DashboardMockup />
+              </ScaledFrame>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-white/10 flex flex-col items-center justify-center p-6 text-center">
+              <button className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full btn-primary flex items-center justify-center pulse-ring transition-transform duration-500 hover:scale-105" aria-label="Play demo">
+                <Play className="w-7 h-7 fill-white text-white ml-1" />
+              </button>
+              <h4 className="mt-5 text-xl sm:text-2xl font-semibold text-ink">Bluetyk 2-Minute Guided Tour</h4>
+              <p className="text-sm text-ink-3 max-w-lg mt-2">
+                Learn how to connect ZKTeco devices via Push ADMS, setup shift rules, and generate monthly salary slips.
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="px-5 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-ink-2 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <span>Ready to test with your own ZKTeco device?</span>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <button onClick={onClose} className="btn btn-ghost btn-sm w-full sm:w-auto">
+                Close
+              </button>
+              <a href="#trial-signup" onClick={onClose} className="btn btn-primary btn-sm w-full sm:w-auto">
                 Start Free Trial
-                <ArrowRight className="w-4 h-4 ml-1.5" />
-              </Button>
-            </a>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );

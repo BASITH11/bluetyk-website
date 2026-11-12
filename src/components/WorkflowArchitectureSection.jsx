@@ -1,56 +1,66 @@
 import React from 'react';
-import { Cpu, Fingerprint, Clock, DollarSign, FileText, ArrowDown, ArrowRight } from 'lucide-react';
+import { Cpu, Fingerprint, Clock, IndianRupee, FileText } from 'lucide-react';
+import SectionHeader from './site/SectionHeader';
+import Reveal from './site/Reveal';
+
+const nodes = [
+  { name: 'ZKTeco Device', desc: 'Biometric Terminal', icon: Cpu, tint: 'bg-slate-900 text-white' },
+  { name: 'Attendance Engine', desc: 'Real-time Punch Sync', icon: Fingerprint, tint: 'bg-emerald-50 text-emerald-600' },
+  { name: 'Leave + Overtime', desc: 'Shift & Holiday Rules', icon: Clock, tint: 'bg-amber-50 text-amber-600' },
+  { name: 'Payroll Engine', desc: 'PF, ESI, TDS Calculator', icon: IndianRupee, tint: 'bg-violet-50 text-violet-600' },
+  { name: 'Reports & Payslips', desc: 'Automated Export', icon: FileText, tint: 'bg-white/20 text-white', final: true },
+];
 
 export default function WorkflowArchitectureSection() {
-  const nodes = [
-    { name: 'ZKTeco Device', desc: 'Biometric Terminal', icon: Cpu },
-    { name: 'Attendance Engine', desc: 'Real-time Punch Sync', icon: Fingerprint },
-    { name: 'Leave + Overtime', desc: 'Shift & Holiday Rules', icon: Clock },
-    { name: 'Payroll Engine', desc: 'PF, ESI, TDS Calculator', icon: DollarSign },
-    { name: 'Reports & Payslips', desc: 'Automated Export', icon: FileText },
-  ];
-
   return (
-    <section className="py-24 bg-[#0B192C] text-white relative overflow-hidden border-b border-slate-800">
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-            From punch to payroll. Automatically.
-          </h2>
-          <p className="text-base sm:text-lg text-slate-400 font-normal">
-            An uninterrupted data flow from hardware terminal touch to bank disbursement.
-          </p>
-        </div>
+    <section className="relative bg-white py-20 sm:py-28 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader
+          title="From punch to payroll. Automatically."
+          subtitle="An uninterrupted data flow from hardware terminal touch to bank disbursement."
+          className="mb-14 sm:mb-20"
+        />
 
-        {/* Visual Pipeline Flow */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 max-w-6xl mx-auto">
-          {nodes.map((node, index) => {
-            const IconComp = node.icon;
-            return (
-              <React.Fragment key={index}>
-                <div className="w-full lg:w-auto bg-slate-900/90 p-5 border border-slate-800 flex flex-col items-center text-center space-y-2 relative group hover:border-[#0284C7] transition-all min-w-[190px]">
-                  <div className="w-10 h-10 bg-[#0284C7]/20 text-[#0284C7] flex items-center justify-center font-bold">
-                    <IconComp className="w-5 h-5" />
+        <div className="relative max-w-6xl mx-auto">
+          {/* Track (desktop: horizontal, mobile: vertical) */}
+          <div className="absolute hidden lg:block left-[8%] right-[8%] top-1/2 -translate-y-1/2 h-px">
+            <svg className="absolute inset-0 w-full h-6 -translate-y-1/2 overflow-visible" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="0" y1="12" x2="100%" y2="12" stroke="#B9DBFF" strokeWidth="2" className="flow-line" />
+            </svg>
+            <div className="absolute top-1/2 -translate-y-1/2 h-1.5 w-28 rounded-full bg-gradient-to-r from-transparent via-brand-500 to-transparent blur-[1px] comet" />
+          </div>
+          <div className="absolute lg:hidden top-[6%] bottom-[6%] left-1/2 -translate-x-1/2 w-px">
+            <svg className="absolute inset-0 h-full w-6 -translate-x-1/2 overflow-visible" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="12" y1="0" x2="12" y2="100%" stroke="#B9DBFF" strokeWidth="2" className="flow-line" />
+            </svg>
+          </div>
+
+          <div className="relative grid lg:grid-cols-5 gap-5 lg:gap-6">
+            {nodes.map((node, i) => {
+              const Icon = node.icon;
+              return (
+                <Reveal key={node.name} delay={i * 110}>
+                  <div
+                    className={`group relative mx-auto w-full max-w-[260px] rounded-3xl p-5 text-center transition-all duration-500 ${
+                      node.final ? 'card-blue' : 'card card-hover'
+                    }`}
+                  >
+                    <div className={`mx-auto w-12 h-12 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 ${node.tint}`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div className={`mt-4 font-display text-[16px] font-semibold tracking-tight ${node.final ? 'text-white' : 'text-ink'}`}>
+                      {node.name}
+                    </div>
+                    <div className={`mt-1 text-[13px] ${node.final ? 'text-white/80' : 'text-ink-3'}`}>{node.desc}</div>
+                    <span className={`absolute top-3 right-4 text-[10px] font-semibold ${node.final ? 'text-white/60' : 'text-ink-3/60'}`}>
+                      0{i + 1}
+                    </span>
                   </div>
-                  <div className="font-bold text-sm text-white">{node.name}</div>
-                  <div className="text-[11px] text-slate-400 font-medium">{node.desc}</div>
-                </div>
-
-                {/* Arrow Connector */}
-                {index < nodes.length - 1 && (
-                  <div className="flex items-center justify-center my-2 lg:my-0 text-[#0284C7]">
-                    <ArrowDown className="lg:hidden w-5 h-5 animate-pulse" />
-                    <ArrowRight className="hidden lg:block w-6 h-6 animate-pulse" />
-                  </div>
-                )}
-              </React.Fragment>
-            );
-          })}
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
-
       </div>
     </section>
   );

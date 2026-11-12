@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { ArrowRight, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { ArrowRight, Loader2, AlertCircle, CheckCircle, Check } from 'lucide-react';
+import Reveal from './site/Reveal';
 import { checkEmailAvailability, submitTrialSignup } from '../services/api';
+
+const inputCls =
+  'w-full h-11 rounded-xl bg-canvas border border-transparent px-3.5 text-sm text-ink placeholder:text-ink-3/70 outline-none transition-all duration-300 focus:bg-white focus:border-brand-300 focus:ring-4 focus:ring-brand-100';
+
+function Field({ id, label, error, aside, children }) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-1.5">
+        <label htmlFor={id} className="text-xs font-semibold text-ink-2">{label}</label>
+        {aside}
+      </div>
+      {children}
+      {error && <p className="text-[11px] text-rose-600 mt-1.5">{error}</p>}
+    </div>
+  );
+}
 
 export default function TrialSignupSection() {
   const [formData, setFormData] = useState({
@@ -93,242 +107,150 @@ export default function TrialSignupSection() {
   };
 
   return (
-    <section id="trial-signup" className="py-24 bg-[#0B192C] text-white relative overflow-hidden">
-      
-      {/* Architectural Border Grid Frame */}
-      <div className="absolute top-0 inset-x-0 h-px bg-slate-800 pointer-events-none z-10" />
-      <div className="absolute bottom-0 inset-x-0 h-px bg-slate-800 pointer-events-none z-10" />
-      <div className="absolute top-0 bottom-0 left-3 sm:left-6 lg:left-8 w-px bg-slate-800 pointer-events-none z-10" />
-      <div className="absolute top-0 bottom-0 right-3 sm:right-6 lg:right-8 w-px bg-slate-800 pointer-events-none z-10" />
+    <section id="trial-signup" className="relative overflow-hidden py-20 sm:py-28 glow-bg-soft">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-20">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Side: Headline & Copy */}
-          <div className="lg:col-span-6 space-y-6 text-left">
-
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Copy */}
+          <Reveal className="lg:col-span-6 space-y-6">
+            <h2 className="text-[2.1rem] leading-[1.06] sm:text-[3.4rem] font-semibold text-ink text-balance">
               Ready to simplify attendance and payroll?
             </h2>
-
-            <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed">
+            <p className="text-base sm:text-lg text-ink-2/80 leading-relaxed max-w-lg">
               Start your 7-day free trial and see how much time your team can save.
             </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-400">
-              <span>✓ No credit card</span>
-              <span>·</span>
-              <span>✓ 7-day trial</span>
-              <span>·</span>
-              <span>✓ Setup support</span>
+            <div className="flex flex-wrap items-center gap-2.5">
+              {['No credit card', '7-day trial', 'Setup support'].map((t) => (
+                <span key={t} className="glass rounded-full px-3.5 py-2 text-[13px] font-medium text-ink flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-brand-600 stroke-[3]" />
+                  {t}
+                </span>
+              ))}
             </div>
-
-            <div className="pt-6 border-t border-slate-800 flex items-center gap-4">
+            <div className="pt-2">
               <a
                 href="mailto:sales@bluewhyteapps.com"
-                className="text-xs font-bold text-slate-400 hover:text-white transition-colors underline"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:text-brand-700 transition-colors group"
               >
-                Need custom enterprise plan? Talk to Sales →
+                Need custom enterprise plan? Talk to Sales
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
             </div>
+          </Reveal>
 
-          </div>
-
-          {/* Right Side: Inline Registration Form */}
-          <div className="lg:col-span-6">
-            <div className="bg-slate-900 p-7 sm:p-9 rounded-2xl border border-slate-800">
-              
-              {signupSuccess ? (
-                <div className="text-center py-8 space-y-5">
-                  <div className="w-14 h-14 bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto rounded-xl border border-emerald-500/30">
-                    <CheckCircle className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white">Your Trial Workspace is Ready!</h3>
-                  <p className="text-xs text-slate-300 max-w-sm mx-auto">
-                    Click below to enter your newly created Bluetyk dashboard.
-                  </p>
-                  <a
-                    href={redirectUrl}
-                    className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#0284C7] hover:bg-[#0369A1] text-white font-bold text-sm rounded-xl transition-colors"
-                  >
-                    Go to Workspace Dashboard
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4 text-left">
-                  <div className="border-b border-slate-800 pb-3 mb-2">
-                    <h3 className="text-lg font-bold text-white">Start Your Free 7-Day Trial</h3>
-                    <p className="text-xs text-slate-400 mt-0.5">Fill out your business details below</p>
-                  </div>
-
-                  {serverMessage && (
-                    <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
-                      <span>{serverMessage}</span>
+          {/* Form */}
+          <Reveal delay={150} className="lg:col-span-6">
+            <div className="rounded-[32px] p-2 glass shadow-[0_40px_80px_-30px_rgba(0,70,160,0.45)]">
+              <div className="bg-white rounded-[26px] p-6 sm:p-8">
+                {signupSuccess ? (
+                  <div className="text-center py-8 space-y-5 fade-up">
+                    <div className="w-16 h-16 bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto rounded-full">
+                      <CheckCircle className="w-8 h-8" />
                     </div>
-                  )}
-
-                  <input
-                    type="text"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleChange}
-                    className="hidden"
-                    tabIndex="-1"
-                    autoComplete="off"
-                  />
-
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <div>
-                      <Label htmlFor="company_name" className="text-xs font-semibold text-slate-300 mb-1 block">
-                        Company Name *
-                      </Label>
-                      <Input
-                        id="company_name"
-                        name="company_name"
-                        placeholder="e.g. ABC Technologies"
-                        value={formData.company_name}
-                        onChange={handleChange}
-                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 text-xs rounded-xl"
-                      />
-                      {errors.company_name && (
-                        <p className="text-[11px] text-rose-400 mt-1">{errors.company_name}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="name" className="text-xs font-semibold text-slate-300 mb-1 block">
-                        Your Full Name *
-                      </Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        placeholder="e.g. Rajesh Kumar"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 text-xs rounded-xl"
-                      />
-                      {errors.name && (
-                        <p className="text-[11px] text-rose-400 mt-1">{errors.name}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <div>
-                      <div className="flex justify-between items-center mb-1">
-                        <Label htmlFor="email" className="text-xs font-semibold text-slate-300">
-                          Work Email *
-                        </Label>
-                        {emailStatus.checking && <span className="text-[10px] text-[#0284C7]">Checking...</span>}
-                      </div>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="name@company.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        onBlur={handleEmailBlur}
-                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 text-xs rounded-xl"
-                      />
-                      {errors.email && (
-                        <p className="text-[11px] text-rose-400 mt-1">{errors.email}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="phone" className="text-xs font-semibold text-slate-300 mb-1 block">
-                        Phone Number *
-                      </Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        placeholder="+91 98765 43210"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 text-xs rounded-xl"
-                      />
-                      {errors.phone && (
-                        <p className="text-[11px] text-rose-400 mt-1">{errors.phone}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <div>
-                      <Label htmlFor="password" className="text-xs font-semibold text-slate-300 mb-1 block">
-                        Password *
-                      </Label>
-                      <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 text-xs rounded-xl"
-                      />
-                      {errors.password && (
-                        <p className="text-[11px] text-rose-400 mt-1">{errors.password}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="password_confirmation" className="text-xs font-semibold text-slate-300 mb-1 block">
-                        Confirm Password *
-                      </Label>
-                      <Input
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        type="password"
-                        placeholder="••••••••"
-                        value={formData.password_confirmation}
-                        onChange={handleChange}
-                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 text-xs rounded-xl"
-                      />
-                      {errors.password_confirmation && (
-                        <p className="text-[11px] text-rose-400 mt-1">{errors.password_confirmation}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    disabled={loading || emailStatus.available === false}
-                    className="w-full py-5 bg-[#0284C7] hover:bg-[#0369A1] text-white font-bold text-sm rounded-xl transition-colors mt-3 flex items-center justify-center gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Creating Account...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Start Free Trial</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </Button>
-
-                  <div className="text-center pt-2">
-                    <a
-                      href="https://app.bluetyk.in"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[11px] font-semibold text-slate-400 hover:text-white transition-colors underline"
-                    >
-                      Already registered? Login here →
+                    <h3 className="text-2xl font-semibold text-ink">Your Trial Workspace is Ready!</h3>
+                    <p className="text-sm text-ink-3 max-w-sm mx-auto">
+                      Click below to enter your newly created Bluetyk dashboard.
+                    </p>
+                    <a href={redirectUrl} className="btn btn-primary w-full">
+                      Go to Workspace Dashboard
+                      <ArrowRight className="w-4 h-4" />
                     </a>
                   </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                    <div className="pb-2">
+                      <h3 className="text-xl font-semibold text-ink">Start Your Free 7-Day Trial</h3>
+                      <p className="text-sm text-ink-3 mt-1">Fill out your business details below</p>
+                    </div>
 
-                </form>
-              )}
+                    {serverMessage && (
+                      <div className="p-3 rounded-xl bg-amber-50 text-amber-800 text-xs flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+                        <span>{serverMessage}</span>
+                      </div>
+                    )}
 
+                    <input
+                      type="text"
+                      name="website"
+                      value={formData.website}
+                      onChange={handleChange}
+                      className="hidden"
+                      tabIndex="-1"
+                      autoComplete="off"
+                    />
+
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <Field id="company_name" label="Company Name *" error={errors.company_name}>
+                        <input id="company_name" name="company_name" placeholder="e.g. ABC Technologies"
+                          value={formData.company_name} onChange={handleChange} className={inputCls} />
+                      </Field>
+                      <Field id="name" label="Your Full Name *" error={errors.name}>
+                        <input id="name" name="name" placeholder="e.g. Rajesh Kumar"
+                          value={formData.name} onChange={handleChange} className={inputCls} />
+                      </Field>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <Field
+                        id="email"
+                        label="Work Email *"
+                        error={errors.email}
+                        aside={emailStatus.checking && <span className="text-[10px] font-semibold text-brand-600">Checking...</span>}
+                      >
+                        <input id="email" name="email" type="email" placeholder="name@company.com"
+                          value={formData.email} onChange={handleChange} onBlur={handleEmailBlur} className={inputCls} />
+                      </Field>
+                      <Field id="phone" label="Phone Number *" error={errors.phone}>
+                        <input id="phone" name="phone" placeholder="+91 98765 43210"
+                          value={formData.phone} onChange={handleChange} className={inputCls} />
+                      </Field>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <Field id="password" label="Password *" error={errors.password}>
+                        <input id="password" name="password" type="password" placeholder="••••••••"
+                          value={formData.password} onChange={handleChange} className={inputCls} />
+                      </Field>
+                      <Field id="password_confirmation" label="Confirm Password *" error={errors.password_confirmation}>
+                        <input id="password_confirmation" name="password_confirmation" type="password" placeholder="••••••••"
+                          value={formData.password_confirmation} onChange={handleChange} className={inputCls} />
+                      </Field>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading || emailStatus.available === false}
+                      className="btn btn-primary btn-lg w-full mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Creating Account...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Start Free Trial</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+
+                    <div className="text-center pt-1">
+                      <a
+                        href="https://app.bluetyk.in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-semibold text-ink-3 hover:text-brand-600 transition-colors"
+                      >
+                        Already registered? Login here →
+                      </a>
+                    </div>
+                  </form>
+                )}
+              </div>
             </div>
-          </div>
-
+          </Reveal>
         </div>
       </div>
     </section>
